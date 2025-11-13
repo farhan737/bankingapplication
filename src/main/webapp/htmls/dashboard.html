@@ -1,0 +1,106 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            margin: 0px;
+            background-color: gray;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        .main-div {
+            width: 800px;
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .info-div {
+            width: 100%;
+            height: 70px;
+            background-color: white;
+            padding: 10px;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            box-sizing: border-box;
+        }
+
+        .actions {
+            width: 100%;
+            flex: 1;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        #main-actions {
+            margin: 20px;
+            box-sizing: border-box;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #quick-actions {
+            margin: 20px;
+            box-sizing: border-box;
+            border: 2px grey dashed;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .main-actions-buttons {
+            height: 80px;
+            margin: 10px 10px;
+            padding: 0px 50px;
+            font-size: 20px;
+            border: 0px;
+        }
+
+        .quick-actions-buttons {
+            height: 80px;
+            margin: 10px 10px;
+            padding: 0px 50px;
+            font-size: 20px;
+            border: 0px;
+        }
+    </style>
+    <title>Dashboard</title>
+</head>
+
+<body>
+    <div class="main-div">
+        <div class="info-div">
+            <p>hi, farhan mohammad</p>
+            <p>mdfarhan93933@gmail.com</p>
+        </div>
+        <div style="height: 10px;"></div>
+        <div class="actions">
+            <div id="main-actions">
+                <button class="main-actions-buttons">withdraw</button>
+                <button class="main-actions-buttons">deposit</button>
+                <button class="main-actions-buttons">accounts</button>
+            </div>
+            <div id="quick-actions">
+                <p>quick actions</p>
+                <div>
+                    <button class="quick-actions-buttons">transaction history</button>
+                    <button class="quick-actions-buttons">transfer to account</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

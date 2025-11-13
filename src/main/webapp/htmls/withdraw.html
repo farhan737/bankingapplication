@@ -1,0 +1,105 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Withdraw</title>
+    <style>
+        body {
+            margin: 0px;
+            background-color: gray;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        .main-div {
+            display: flex;
+            flex-direction: column;
+            height: 800px;
+            width: 40%;
+        }
+
+        #actions {
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            flex: 1;
+        }
+
+        .accounts {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid black;
+            padding: 10px;
+            margin: 10px 0;
+            cursor: pointer;
+        }
+
+        .accounts:hover {
+            background-color: #f3f3f3;
+        }
+
+        .accounts input[type="radio"] {
+            accent-color: green;
+            transform: scale(1.2);
+        }
+
+
+        #account-pin {
+            height: 60px;
+            width: 20%;
+            margin-top: 10px;
+        }
+
+        #withdraw-button {
+            height: 60px;
+            width: 100%;
+            margin-top: 10px;
+            font-size: 20px;
+        }
+
+        .accounts {
+            display: flex;
+            justify-content: space-between;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-div">
+        <div
+            style="background-color: white; padding: 10px;box-sizing: border-box;height: 80px;display: flex; justify-content: space-between;">
+            <button style="width: 30%;">go back</button>
+            <input type="number" id="amount-input" style="height: 100%; width: 70%;margin-left: 10px;">
+        </div>
+        <div style="height: 10px;"></div>
+        <div id="actions">
+            <div id="account-selector">
+                <label class="accounts">
+                    <input type="radio" name="account" value="3423" style="margin-right:10px;">
+                    <p>3423</p>
+                    <p>savings</p>
+                    <p>$2500</p>
+                </label>
+                <label class="accounts">
+                    <input type="radio" name="account" value="5353" style="margin-right:10px;">
+                    <p>5353</p>
+                    <p>current</p>
+                    <p>$1042</p>
+                </label>
+            </div>
+            <div style="display: flex;flex: 1;"></div>
+            <div style="display: flex; flex-direction: column; justify-content: center;align-items: center;">
+                <label for="">pin</label>
+                <input type="password" id="account-pin">
+                <button id="withdraw-button">withdraw</button>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
