@@ -61,7 +61,10 @@ public class RegistrationServlet extends HttpServlet {
 		UserService uService = new UserServiceImpl();
 
 		int status = uService.validateUserInfo(user, userDetails);
-
+		String confirmPassword = request.getParameter("confirmPassword");
+		if (!user.getPassword().equals(confirmPassword)) {
+			status = -16;
+		}
 		if (status < 0) {
 			String message = ((UserServiceImpl) uService).getStatusmessage().get(status);
 			request.setAttribute("status", message);

@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
 		return STATUSMESSAGE;
 	}
 
-	public UserServiceImpl(){
+	public UserServiceImpl() {
 		STATUSMESSAGE.put(1, "Valid user details");
 		STATUSMESSAGE.put(-1, "user or details missing");
 		STATUSMESSAGE.put(-2, "email is empty");
@@ -34,6 +34,8 @@ public class UserServiceImpl implements UserService {
 		STATUSMESSAGE.put(-13, "Invalid pincode");
 		STATUSMESSAGE.put(-14, "date of birth missing");
 		STATUSMESSAGE.put(-15, "date of birth cannot be in the future");
+		STATUSMESSAGE.put(-16, "confirm password does not match password");
+		STATUSMESSAGE.put(-17, "invalid user credentials");
 	}
 
 	@Override
@@ -86,19 +88,19 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int validateUserInfo(Users user) {
 		if (user == null)
-			return -1;
+			return -1; // object missing
 
 		String email = user.getEmail();
 		if (email == null || email.trim().isEmpty())
-			return -2;
+			return -2; // Missing email
 		if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$"))
-			return -3;
+			return -3; // Invalid email format
 
 		String password = user.getPassword();
 		if (password == null || password.trim().isEmpty())
-			return -4;
+			return -4; // Missing password
 		if (password.length() < 6)
-			return -5;
+			return -5; // Password too short
 
 		return 1;
 	}

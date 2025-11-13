@@ -132,7 +132,7 @@
             <div style="width: 30px;"></div>
             <div class="input-div">
                 <label>confirm-password:</label>
-                <input type="password" class="input-box">
+                <input type="password" class="input-box" name="confirmPassword">
             </div>
         </div>
         <button

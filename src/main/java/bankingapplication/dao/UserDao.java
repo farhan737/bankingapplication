@@ -21,7 +21,7 @@ public class UserDao {
 			pstmt.setString(2, user.getPassword());
 			status = (0 < pstmt.executeUpdate()) ? true : false;
 			if (status)
-				System.out.printf("successfully inserted/n	email: %s/n	password: %s", user.getEmail(),
+				System.out.printf("successfully inserted\nemail\t%s\npassword:\t%s", user.getEmail(),
 						user.getPassword());
 		} catch (SQLException e) {
 			e.printStackTrace();
