@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -71,9 +72,12 @@
         <div style="display: flex;justify-content: center;">
             <p style="font-size: 40px;margin: 0px;">Registration</p>
         </div>
-        <div id="warning-red">
-            <p>could not register, user already exists with the given email or contact number</p>
-        </div>
+        <c:if test="${not empty status}">
+    		<div id="warning-red">
+        		<p>${status}</p>
+    		</div>
+		</c:if>
+
         <div style="display: flex;">
             <div class="input-div">
                 <label>first name:</label>

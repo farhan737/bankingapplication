@@ -51,14 +51,20 @@ public class RegistrationServlet extends HttpServlet {
 		userDetails.setState(request.getParameter("state"));
 		userDetails.setDistrict(request.getParameter("district"));
 		userDetails.setCity(request.getParameter("city"));
-		userDetails.setDateOfBirth(LocalDate.parse(request.getParameter("dateOfBirth")));
+		String dobParam = request.getParameter("dateOfBirth");
+		if (dobParam != null && !dobParam.isEmpty()) {
+			userDetails.setDateOfBirth(LocalDate.parse(dobParam));
+		} else {
+			userDetails.setDateOfBirth(null);
+		}
 
 		UserService uService = new UserServiceImpl();
 
 		int status = uService.validateUserInfo(user, userDetails);
 
 		if (status < 0) {
-			request.setAttribute("invalidCredentials", status);
+			String message = ((UserServiceImpl) uService).getStatusmessage().get(status);
+			request.setAttribute("status", message);
 			request.getRequestDispatcher("register.jsp").forward(request, response);
 		} else {
 			if (uService.registerUser(user, userDetails)) {

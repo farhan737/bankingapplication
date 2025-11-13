@@ -1,5 +1,8 @@
 package bankingapplication.service.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import bankingapplication.dao.UserDao;
 import bankingapplication.dao.UserDetailsDao;
 import bankingapplication.dto.UserDetails;
@@ -7,6 +10,32 @@ import bankingapplication.dto.Users;
 import bankingapplication.service.UserService;
 
 public class UserServiceImpl implements UserService {
+
+	public final Map<Integer, String> STATUSMESSAGE = new HashMap<>();
+
+	public Map<Integer, String> getStatusmessage() {
+		return STATUSMESSAGE;
+	}
+
+	public UserServiceImpl(){
+		STATUSMESSAGE.put(1, "Valid user details");
+		STATUSMESSAGE.put(-1, "user or details missing");
+		STATUSMESSAGE.put(-2, "email is empty");
+		STATUSMESSAGE.put(-3, "invalid email format");
+		STATUSMESSAGE.put(-4, "password missing");
+		STATUSMESSAGE.put(-5, "password too short, should be atleast 6 characters long");
+		STATUSMESSAGE.put(-6, "first name missing");
+		STATUSMESSAGE.put(-7, "last name missing");
+		STATUSMESSAGE.put(-8, "Invalid contact number");
+		STATUSMESSAGE.put(-9, "address missing");
+		STATUSMESSAGE.put(-10, "state missing");
+		STATUSMESSAGE.put(-11, "district missing");
+		STATUSMESSAGE.put(-12, "city missing");
+		STATUSMESSAGE.put(-13, "Invalid pincode");
+		STATUSMESSAGE.put(-14, "date of birth missing");
+		STATUSMESSAGE.put(-15, "date of birth cannot be in the future");
+	}
+
 	@Override
 	public boolean userExists(Users user) {
 		UserDao uDao = new UserDao();
