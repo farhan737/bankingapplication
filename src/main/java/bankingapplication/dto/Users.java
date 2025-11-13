@@ -1,6 +1,6 @@
 package bankingapplication.dto;
 
-import java.security.Timestamp;
+import java.sql.Timestamp;
 
 public class Users {
 	private int userId;

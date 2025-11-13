@@ -56,29 +56,80 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int validateUserInfo(Users user) {
-	    if (user == null)
-	        return -1;
+		if (user == null)
+			return -1;
 
-	    String email = user.getEmail();
-	    if (email == null || email.trim().isEmpty())
-	        return -2;
-	    if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$"))
-	        return -3;
+		String email = user.getEmail();
+		if (email == null || email.trim().isEmpty())
+			return -2;
+		if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$"))
+			return -3;
 
-	    String password = user.getPassword();
-	    if (password == null || password.trim().isEmpty())
-	        return -4;
-	    if (password.length() < 6)
-	        return -5;
+		String password = user.getPassword();
+		if (password == null || password.trim().isEmpty())
+			return -4;
+		if (password.length() < 6)
+			return -5;
 
-	    return 1;
+		return 1;
 	}
 
-
 	@Override
-	public boolean validateUserInfo(Users user, UserDetails userDetails) {
-		// TODO Auto-generated method stub
-		return false;
+	public int validateUserInfo(Users user, UserDetails userDetails) {
+
+		if (user == null || userDetails == null)
+			return -1; // One or both objects missing
+
+		String email = user.getEmail();
+		if (email == null || email.trim().isEmpty())
+			return -2; // Missing email
+		if (!email.matches("^[A-Za-z0-9+_.-]+@(.+)$"))
+			return -3; // Invalid email format
+
+		String password = user.getPassword();
+		if (password == null || password.trim().isEmpty())
+			return -4; // Missing password
+		if (password.length() < 6)
+			return -5; // Password too short
+
+		String firstName = userDetails.getFirstName();
+		if (firstName == null || firstName.trim().isEmpty())
+			return -6; // Missing first name
+
+		String lastName = userDetails.getLastName();
+		if (lastName == null || lastName.trim().isEmpty())
+			return -7; // Missing last name
+
+		String contactNumber = userDetails.getContactNumber();
+		if (contactNumber == null || !contactNumber.matches("\\d{10}"))
+			return -8; // Invalid contact number (must be 10 digits)
+
+		String address = userDetails.getPermanentAddress();
+		if (address == null || address.trim().isEmpty())
+			return -9; // Missing address
+
+		String state = userDetails.getState();
+		if (state == null || state.trim().isEmpty())
+			return -10; // Missing state
+
+		String district = userDetails.getDistrict();
+		if (district == null || district.trim().isEmpty())
+			return -11; // Missing district
+
+		String city = userDetails.getCity();
+		if (city == null || city.trim().isEmpty())
+			return -12; // Missing city
+
+		String pincode = userDetails.getPincode();
+		if (pincode == null || !pincode.matches("\\d{6}"))
+			return -13; // Invalid pincode (must be 6 digits)
+
+		if (userDetails.getDateOfBirth() == null)
+			return -14; // Missing DOB
+		if (userDetails.getDateOfBirth().isAfter(java.time.LocalDate.now()))
+			return -15; // DOB cannot be in the future
+
+		return 1;
 	}
 
 }

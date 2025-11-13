@@ -37,12 +37,13 @@ public class UserDao {
 			PreparedStatement pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, userId);
 			ResultSet rs = pstmt.executeQuery();
-			rs.next();
 			user = new Users();
-			user.setUserId(rs.getInt("userId"));
-			user.setEmail(rs.getString("email"));
-			user.setPassword(rs.getString("password"));
-			user.setRole(rs.getString("role"));
+			if (rs.next()) {
+				user.setUserId(rs.getInt("userId"));
+				user.setEmail(rs.getString("email"));
+				user.setPassword(rs.getString("password"));
+				user.setRole(rs.getString("role"));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -57,12 +58,13 @@ public class UserDao {
 			PreparedStatement pstmt = conn.prepareStatement(query);
 			pstmt.setString(1, email);
 			ResultSet rs = pstmt.executeQuery();
-			rs.next();
-			user = new Users();
-			user.setUserId(rs.getInt("userId"));
-			user.setEmail(rs.getString("email"));
-			user.setPassword(rs.getString("password"));
-			user.setRole(rs.getString("password"));
+			if (rs.next()) {
+				user = new Users();
+				user.setUserId(rs.getInt("userId"));
+				user.setEmail(rs.getString("email"));
+				user.setPassword(rs.getString("password"));
+				user.setRole(rs.getString("role"));
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

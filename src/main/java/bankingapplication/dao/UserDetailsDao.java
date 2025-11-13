@@ -10,18 +10,19 @@ import bankingapplication.util.DatabaseUtil;
 
 public class UserDetailsDao {
 	public boolean setUserDetails(UserDetails userdetails) {
-		String query = "insert into userDetails(firstName, lastName, contactNumber, permanentAddress, state, district, city, pincode, dateOfBirth) values (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		String query = "insert into userDetails(userId, firstName, lastName, contactNumber, permanentAddress, state, district, city, pincode, dateOfBirth) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
 		Connection conn = DatabaseUtil.getConnection();
 		try (PreparedStatement pstmt = conn.prepareStatement(query)) {
-			pstmt.setString(1, userdetails.getFirstName());
-			pstmt.setString(2, userdetails.getLastName());
-			pstmt.setString(3, userdetails.getContactNumber());
-			pstmt.setString(4, userdetails.getPermanentAddress());
-			pstmt.setString(5, userdetails.getState());
-			pstmt.setString(6, userdetails.getDistrict());
-			pstmt.setString(7, userdetails.getCity());
-			pstmt.setString(8, userdetails.getPincode());
-			pstmt.setDate(9, java.sql.Date.valueOf(userdetails.getDateOfBirth()));
+			pstmt.setInt(1,userdetails.getUserId());
+			pstmt.setString(2, userdetails.getFirstName());
+			pstmt.setString(3, userdetails.getLastName());
+			pstmt.setString(4, userdetails.getContactNumber());
+			pstmt.setString(5, userdetails.getPermanentAddress());
+			pstmt.setString(6, userdetails.getState());
+			pstmt.setString(7, userdetails.getDistrict());
+			pstmt.setString(8, userdetails.getCity());
+			pstmt.setString(9, userdetails.getPincode());
+			pstmt.setDate(10, java.sql.Date.valueOf(userdetails.getDateOfBirth()));
 			return pstmt.executeUpdate() > 0;
 		} catch (SQLException e) {
 			e.printStackTrace();

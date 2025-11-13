@@ -21,25 +21,28 @@ public class RegistrationServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
+		doPost(request, response);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		Users user = new Users();
 		UserDetails userDetails = new UserDetails();
-		
-		//set initial user details
+
+		// set initial user details
 		user.setEmail(request.getParameter("email"));
 		user.setPassword(request.getParameter("password"));
-		
-		//set complete user details 
+
+		// set complete user details
 		userDetails.setFirstName(request.getParameter("firstName"));
 		userDetails.setLastName(request.getParameter("lastName"));
 		userDetails.setContactNumber(request.getParameter("contactNumber"));
@@ -49,14 +52,21 @@ public class RegistrationServlet extends HttpServlet {
 		userDetails.setDistrict(request.getParameter("district"));
 		userDetails.setCity(request.getParameter("city"));
 		userDetails.setDateOfBirth(LocalDate.parse(request.getParameter("dateOfBirth")));
-		
+
 		UserService uService = new UserServiceImpl();
-		if(uService.registerUser(user, userDetails)) {
-			request.getRequestDispatcher("dashboard.jsp").forward(request, response);
-		} else {
-			request.setAttribute("status", "failed");
+
+		int status = uService.validateUserInfo(user, userDetails);
+
+		if (status < 0) {
+			request.setAttribute("invalidCredentials", status);
 			request.getRequestDispatcher("register.jsp").forward(request, response);
+		} else {
+			if (uService.registerUser(user, userDetails)) {
+				response.sendRedirect("index.jsp");
+			} else {
+				request.setAttribute("exists", true);
+				request.getRequestDispatcher("register.jsp").forward(request, response);
+			}
 		}
 	}
-
 }

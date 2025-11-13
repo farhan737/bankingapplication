@@ -7,7 +7,7 @@ public interface UserService {
 
 	public int validateUserInfo(Users user);
 	
-	public boolean validateUserInfo(Users user, UserDetails userDetails);
+	public int validateUserInfo(Users user, UserDetails userDetails);
 	
 	public boolean userExists(Users user);
 
