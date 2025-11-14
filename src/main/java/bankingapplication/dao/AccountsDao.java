@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import bankingapplication.dto.Accounts;
+import bankingapplication.dto.Transactions;
 import bankingapplication.util.DatabaseUtil;
 
 public class AccountsDao {
@@ -27,6 +28,23 @@ public class AccountsDao {
 		return status;
 	}
 
+	
+	public boolean updateBalance(int accountId, double newBalance) {
+	    String query = "update accounts set balance = ? where accountId = ?";
+	    Connection conn = DatabaseUtil.getConnection();
+
+	    try {
+	        PreparedStatement pstmt = conn.prepareStatement(query);
+	        pstmt.setDouble(1, newBalance);
+	        pstmt.setInt(2, accountId);
+	        return pstmt.executeUpdate() > 0;
+	    } catch (SQLException e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
+
+	
 	public Accounts getAccountByAccountId(int accountId) {
 		Accounts account = null;
 		String query = "select * from accounts where accountId = ?;";

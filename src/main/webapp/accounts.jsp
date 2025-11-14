@@ -94,7 +94,6 @@
         	
             <div class="action-buttons">
                 <button onclick="location.href='dashboard.jsp'">go back</button>
-                <button onclick="location.href='create-account.jsp'">create a new account</button>
             </div>
             
             <%
@@ -118,7 +117,7 @@
 
 			<c:if test="${not empty sessionScope.account}">
 			    <div class="account-cards">
-			        <p>${sessionScope.account.accountNumber}</p>
+			        <p>${sessionScope.account.accountId}</p>
 			        <p>${sessionScope.account.accountType}</p>
 			        <p>${sessionScope.account.balance}</p>
 			    </div>

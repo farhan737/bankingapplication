@@ -2,6 +2,7 @@ package bankingapplication.controller;
 
 import java.io.IOException;
 
+import bankingapplication.dao.AccountsDao;
 import bankingapplication.dao.UserDao;
 import bankingapplication.dao.UserDetailsDao;
 import bankingapplication.dto.Users;
@@ -54,6 +55,7 @@ public class LoginServlet extends HttpServlet {
 			if (userService.loginUser(user)) {
 
 				UserDao uDao = new UserDao();
+				AccountsDao aDao = new AccountsDao();
 				Users loggedInUser = uDao.getUserByEmail(user.getEmail()); // full user object
 
 				HttpSession session = request.getSession();
@@ -61,6 +63,8 @@ public class LoginServlet extends HttpServlet {
 
 				UserDetailsDao uDDao = new UserDetailsDao();
 				session.setAttribute("userDetails", uDDao.getUserDetailsById(loggedInUser.getUserId()));
+
+				session.setAttribute("account", aDao.getAccountByUserId(loggedInUser.getUserId()));
 
 				response.sendRedirect("dashboard.jsp");
 			} else {

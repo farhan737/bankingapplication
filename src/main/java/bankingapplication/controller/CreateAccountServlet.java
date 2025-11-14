@@ -2,7 +2,9 @@ package bankingapplication.controller;
 
 import java.io.IOException;
 
+import bankingapplication.dao.AccountsDao;
 import bankingapplication.dto.Accounts;
+import bankingapplication.dto.Transactions;
 import bankingapplication.dto.Users;
 import bankingapplication.service.AccountService;
 import bankingapplication.service.impl.AccountServiceImpl;
@@ -45,18 +47,20 @@ public class CreateAccountServlet extends HttpServlet {
 		double initialDeposit = 0.0;
 		if (amountStr == null || amountStr.isEmpty()) {
 			status = -5; // amount can't be null or empty
-		} else 
+		} else
 			initialDeposit = Double.parseDouble(amountStr);
 		account.setAccountType(request.getParameter("accountType"));
-		account.setBalance(0.0); // initially set balance as 0.0
+		account.setBalance(initialDeposit);
 		account.setAccountPin(request.getParameter("accountPin"));
 		AccountService accountService = new AccountServiceImpl();
 		status = status < 0 ? status : accountService.validateAccount(account);
 		if (status > 0) {
-			// TODO call the createAccount(account) method to create the account
-			// TODO implement TransactionService and make a 'initial deposit' trasaction
-			// with the initialDeposit variable
-			// TODO set the account to the session using session.setAttribute("account");
+			accountService.createAccount(account);
+			Accounts createdAccount = new AccountsDao().getAccountByUserId(account.getUserId());
+			session.setAttribute("account", createdAccount);
+
+			response.sendRedirect("accounts.jsp"); // <---- FIX
+			return;
 		} else {
 			request.setAttribute("status", status);
 			request.getRequestDispatcher("create-account.jsp").forward(request, response);

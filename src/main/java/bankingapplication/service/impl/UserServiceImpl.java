@@ -11,7 +11,7 @@ import bankingapplication.service.UserService;
 
 public class UserServiceImpl implements UserService {
 
-	public final Map<Integer, String> STATUSMESSAGE = new HashMap<>();
+	final private Map<Integer, String> STATUSMESSAGE = new HashMap<>();
 
 	public Map<Integer, String> getStatusmessage() {
 		return STATUSMESSAGE;
