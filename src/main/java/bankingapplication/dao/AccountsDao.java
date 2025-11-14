@@ -49,28 +49,52 @@ public class AccountsDao {
 		return account;
 	}
 
-	public List<Accounts> getAccountsByUserId(int userId) {
-		List<Accounts> accounts = new ArrayList<>();
+//	not needed as i am planning to make it so there is only one account (savings/current) per user
+//	public List<Accounts> getAccountsByUserId(int userId) {
+//		List<Accounts> accounts = new ArrayList<>();
+//		String query = "select * from accounts where userId = ?;";
+//		Connection conn = DatabaseUtil.getConnection();
+//		try {
+//			PreparedStatement pstmt = conn.prepareStatement(query);
+//			pstmt.setInt(1, userId);
+//			ResultSet rs = pstmt.executeQuery();
+//			while (rs.next()) {
+//				Accounts account = new Accounts();
+//				account.setUserId(rs.getInt("userId"));
+//				account.setAccountId(rs.getInt("accountId"));
+//				account.setBalance(rs.getDouble("balance"));
+//				account.setAccountPin(rs.getString("accountPin"));
+//				account.setAccountType(rs.getString("accountType"));
+//				account.setCreatedAt(rs.getTimestamp("createdAt"));
+//				accounts.add(account);
+//			}
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return accounts;
+//	}
+	
+	public Accounts getAccountByUserId(int userId) {
 		String query = "select * from accounts where userId = ?;";
 		Connection conn = DatabaseUtil.getConnection();
+		Accounts account = null;
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(query);
 			pstmt.setInt(1, userId);
 			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
-				Accounts account = new Accounts();
+			if (rs.next()) {
+				account = new Accounts();
 				account.setUserId(rs.getInt("userId"));
 				account.setAccountId(rs.getInt("accountId"));
 				account.setBalance(rs.getDouble("balance"));
 				account.setAccountPin(rs.getString("accountPin"));
 				account.setAccountType(rs.getString("accountType"));
 				account.setCreatedAt(rs.getTimestamp("createdAt"));
-				accounts.add(account);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return accounts;
+		return account;
 	}
 
 	public List<Accounts> getAllAccounts() {

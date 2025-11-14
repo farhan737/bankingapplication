@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -90,6 +91,10 @@
         	response.sendRedirect("index.jsp");
         	return;
 	    }
+		if (session.getAttribute("account") == null) {
+			response.sendRedirect("create-account.jsp");
+			return;
+		}
 	%>
 
 
@@ -104,9 +109,9 @@
         <div style="height: 10px;"></div>
         <div class="actions">
             <div id="main-actions">
-                <button class="main-actions-buttons">withdraw</button>
-                <button class="main-actions-buttons">deposit</button>
-                <button class="main-actions-buttons">accounts</button>
+                <button onclick="location.href='withdraw.jsp'" class="main-actions-buttons">withdraw</button>
+                <button onclick="location.href='deposit.jsp'" class="main-actions-buttons">deposit</button>
+                <button onclick="location.href='accounts.jsp'" class="main-actions-buttons">account</button>
             </div>
             <div id="quick-actions">
                 <p>quick actions</p>
