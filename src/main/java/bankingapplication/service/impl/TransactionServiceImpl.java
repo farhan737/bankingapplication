@@ -100,8 +100,15 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public boolean widthdraw(Accounts account, Transactions transaction) {
-		// TODO Auto-generated method stub
-		return false;
+		if (account.getBalance() < transaction.getAmount()) {
+			return false;
+		}
+		TransactionsDao tDao = new TransactionsDao();
+		AccountsDao aDao = new AccountsDao();
+		double newBalance = account.getBalance() - transaction.getAmount();
+		boolean transactionSaved = tDao.setTransaction(transaction);
+		boolean balanceUpdated = aDao.updateBalance(account.getAccountId(), newBalance);
+		return transactionSaved && balanceUpdated;
 	}
 
 	@Override
