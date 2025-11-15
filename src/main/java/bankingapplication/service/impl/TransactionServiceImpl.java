@@ -58,7 +58,7 @@ public class TransactionServiceImpl implements TransactionService {
 		type = type.toLowerCase();
 
 		// Check valid types
-		if (!type.equals("deposit") && !type.equals("withdraw") && !type.equals("transfer")
+		if (!type.equals("deposit") && !type.equals("withdraw") && !type.equals("transfer_out")
 				&& !type.equals("initial_deposit"))
 			return -6; // unknown transaction type
 
@@ -113,8 +113,17 @@ public class TransactionServiceImpl implements TransactionService {
 
 	@Override
 	public boolean transfer(Accounts fromAccount, Accounts toAccount, Transactions transaction) {
-		// TODO Auto-generated method stub
-		return false;
+		if (fromAccount.getBalance() < transaction.getAmount()) {
+			return false;
+		}
+		TransactionsDao tDao = new TransactionsDao();
+		AccountsDao aDao = new AccountsDao();
+		double newFromAccountBalance = fromAccount.getBalance() - transaction.getAmount();
+		double newToAccountBalance = toAccount.getBalance() + transaction.getAmount();
+		boolean transactionSaved = tDao.setTransaction(transaction);
+		boolean fromAccountBalanceUpdated = aDao.updateBalance(fromAccount.getAccountId(), newFromAccountBalance);
+		boolean toAccountBalanceUpdated = aDao.updateBalance(toAccount.getAccountId(),newToAccountBalance);
+		return transactionSaved && fromAccountBalanceUpdated && toAccountBalanceUpdated;
 	}
 
 }

@@ -98,6 +98,7 @@ public class WithdrawServlet extends HttpServlet {
 		}
 
 		// ----------- UPDATE SESSION -----------
+		System.out.println(status + "from withdraw");
 		Accounts updated = new AccountsDao().getAccountByAccountId(account.getAccountId());
 		session.setAttribute("account", updated);
 		response.sendRedirect("dashboard.jsp");

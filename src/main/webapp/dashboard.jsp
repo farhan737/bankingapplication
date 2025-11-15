@@ -1,6 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ page import="bankingapplication.dto.Users" %>
+<%@ page import="bankingapplication.dto.Accounts" %>
+<%@ page import="bankingapplication.dao.AccountsDao" %>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -94,6 +98,10 @@
 		if (session.getAttribute("account") == null) {
 			response.sendRedirect("create-account.jsp");
 			return;
+		} else {
+			 AccountsDao aDao_dashboard = new AccountsDao();
+			 Accounts refreshedAccount = aDao_dashboard.getAccountByUserId(((Users)session.getAttribute("user")).getUserId());
+			 session.setAttribute("account", refreshedAccount);
 		}
 	%>
 
@@ -117,7 +125,7 @@
                 <p>quick actions</p>
                 <div>
                     <button class="quick-actions-buttons">transaction history</button>
-                    <button class="quick-actions-buttons">transfer to account</button>
+                    <button onclick="location.href='transfer.jsp'" class="quick-actions-buttons">transfer to account</button>
                 </div>
             </div>
         </div>

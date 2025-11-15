@@ -17,10 +17,10 @@ import bankingapplication.service.TransactionService;
 import bankingapplication.service.impl.TransactionServiceImpl;
 
 /**
- * Servlet implementation class DepositServlet
+ * Servlet implementation class TransferServlet
  */
-@WebServlet("/deposit")
-public class DepositServlet extends HttpServlet {
+@WebServlet("/transfer")
+public class TransferServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -36,41 +36,51 @@ public class DepositServlet extends HttpServlet {
 		}
 
 		Users user = (Users) session.getAttribute("user");
-		Accounts account = (Accounts) session.getAttribute("account");
+		Accounts fromAccount = (Accounts) session.getAttribute("account");
 
 		int status = 1;
 
 		// ----------- AMOUNT VALIDATION -----------
+		double amount = 0;
 		String amountStr = request.getParameter("amount");
 		if (amountStr == null || amountStr.isEmpty()) {
-			status = -4; // invalid amount
-		}
-
-		double amount = 0;
-		if (status > 0) {
-			amount = Double.parseDouble(amountStr);
+		    status = -4;
+		} else {
+		    try {
+		        amount = Double.parseDouble(amountStr);
+		        if (amount <= 0) status = -4;
+		    } catch (NumberFormatException e) {
+		        status = -4;
+		    }
 		}
 
 		// ----------- PIN VALIDATION -----------
 		String pinStr = request.getParameter("accountPin");
 		if (pinStr == null || pinStr.isEmpty()) {
 			status = -2; // PIN missing
-		} else if (!pinStr.equals(account.getAccountPin())) {
+		} else if (!pinStr.equals(fromAccount.getAccountPin())) {
 			status = -12; // wrong PIN
 		}
 
 		// Stop early if any validation failed
 		if (status < 0) {
 			request.setAttribute("status", status);
-			request.getRequestDispatcher("deposit.jsp").forward(request, response);
+			request.getRequestDispatcher("transfer.jsp").forward(request, response);
 			return;
 		}
 
 		// ----------- CREATE TRANSACTION OBJECT -----------
 		Transactions transaction = new Transactions();
 		transaction.setUserId(user.getUserId());
-		transaction.setAccountId(account.getAccountId());
-		transaction.setTransactionType("deposit");
+		transaction.setAccountId(fromAccount.getAccountId());
+		int toAccountId = 0;
+		try {
+		    toAccountId = Integer.parseInt(request.getParameter("toAccountId"));
+		} catch (NumberFormatException e) {
+		    status = -7;
+		}
+		transaction.setToAccountId(toAccountId);
+		transaction.setTransactionType("transfer_out");
 		transaction.setAmount(amount);
 
 		TransactionService tService = new TransactionServiceImpl();
@@ -79,24 +89,42 @@ public class DepositServlet extends HttpServlet {
 		status = tService.validateTransaction(transaction);
 		if (status < 0) {
 			request.setAttribute("status", status);
-			request.getRequestDispatcher("deposit.jsp").forward(request, response);
+			request.getRequestDispatcher("transfer.jsp").forward(request, response);
 			return;
 		}
 
-		// ----------- EXECUTE DEPOSIT -----------
-		boolean success = tService.deposit(account, transaction);
+		// ----------- EXECUTE TRANSFER -----------
+		Accounts toAccount = new AccountsDao().getAccountByAccountId(transaction.getToAccountId());
+
+		if (toAccount == null) {
+			status = -7; // "destination account missing"
+			request.setAttribute("status", status);
+			request.getRequestDispatcher("transfer.jsp").forward(request, response);
+			return;
+		}
+		
+		if (toAccount.getAccountId() == fromAccount.getAccountId()) {
+		    status = -8;
+		    request.setAttribute("status", status);
+		    request.getRequestDispatcher("transfer.jsp").forward(request, response);
+		    return;
+		}
+
+
+		boolean success = tService.transfer(fromAccount, toAccount, transaction);
 
 		if (!success) {
-			status = -11;
+			status = -11; // probably insufficient balance
 			request.setAttribute("status", status);
-			request.getRequestDispatcher("deposit.jsp").forward(request, response);
+			request.getRequestDispatcher("transfer.jsp").forward(request, response);
 			return;
 		}
 
 		// ----------- UPDATE SESSION -----------
-		System.out.println(status + "from deposit");
-		Accounts updated = new AccountsDao().getAccountByAccountId(account.getAccountId());
+		System.out.println(status + "from transfer");
+		Accounts updated = new AccountsDao().getAccountByAccountId(fromAccount.getAccountId());
 		session.setAttribute("account", updated);
 		response.sendRedirect("dashboard.jsp");
 	}
+
 }
