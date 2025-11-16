@@ -61,7 +61,7 @@ public class TransactionsDao {
 
 	public List<Transactions> getTransactionByAccountId(int accountId) {
 		List<Transactions> transactions = new ArrayList<>();
-		String query = "select * from transactions where accountId = ? or toAccountId = ?;";
+		String query = "select * from transactions where accountId = ? or toAccountId = ? order by transactionId desc;";
 		Connection conn = DatabaseUtil.getConnection();
 		try {
 			PreparedStatement pstmt = conn.prepareStatement(query);

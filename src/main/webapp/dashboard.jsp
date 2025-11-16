@@ -124,7 +124,7 @@
             <div id="quick-actions">
                 <p>quick actions</p>
                 <div>
-                    <button class="quick-actions-buttons">transaction history</button>
+                    <button onclick="location.href='transaction-history.jsp'" class="quick-actions-buttons">transaction history</button>
                     <button onclick="location.href='transfer.jsp'" class="quick-actions-buttons">transfer to account</button>
                 </div>
             </div>
