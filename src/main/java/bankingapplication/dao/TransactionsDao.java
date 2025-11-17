@@ -60,29 +60,39 @@ public class TransactionsDao {
 	}
 
 	public List<Transactions> getTransactionByAccountId(int accountId) {
-		List<Transactions> transactions = new ArrayList<>();
-		String query = "select * from transactions where accountId = ? or toAccountId = ? order by transactionId desc;";
-		Connection conn = DatabaseUtil.getConnection();
-		try {
-			PreparedStatement pstmt = conn.prepareStatement(query);
-			pstmt.setInt(1, accountId);
-			pstmt.setInt(2, accountId);
-			ResultSet rs = pstmt.executeQuery();
+		List<Transactions> list = new ArrayList<>();
+		String q = "SELECT *, " + "CASE "
+				+ "   WHEN accountId = ? AND transactionType = 'transfer_out' THEN 'transfer_out' "
+				+ "   WHEN toAccountId = ? AND transactionType = 'transfer_out' THEN 'transfer_in' "
+				+ "   ELSE transactionType " + "END AS direction " + "FROM transactions "
+				+ "WHERE accountId = ? OR toAccountId = ? " + "ORDER BY transactionId DESC";
+
+		try (Connection conn = DatabaseUtil.getConnection(); PreparedStatement ps = conn.prepareStatement(q)) {
+
+			ps.setInt(1, accountId);
+			ps.setInt(2, accountId);
+			ps.setInt(3, accountId);
+			ps.setInt(4, accountId);
+
+			ResultSet rs = ps.executeQuery();
 			while (rs.next()) {
-				Transactions transaction = new Transactions();
-				transaction.setTransactionId(rs.getInt("transactionId"));
-				transaction.setUserId(rs.getInt("userId"));
-				transaction.setAccountId(rs.getInt("accountId"));
-				transaction.setAmount(rs.getDouble("amount"));
-				transaction.setToAccountId(rs.getInt("toAccountId"));
-				transaction.setTransactionType(rs.getString("transactionType"));
-				transaction.setTransactionTime(rs.getTimestamp("transactionTime"));
-				transactions.add(transaction);
+				Transactions t = new Transactions();
+				t.setTransactionId(rs.getInt("transactionId"));
+				t.setUserId(rs.getInt("userId"));
+				t.setAccountId(rs.getInt("accountId"));
+				t.setToAccountId(rs.getInt("toAccountId"));
+				t.setAmount(rs.getDouble("amount"));
+				t.setTransactionTime(rs.getTimestamp("transactionTime"));
+
+				// This is the important part:
+				t.setTransactionType(rs.getString("direction"));
+
+				list.add(t);
 			}
-		} catch (SQLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return transactions;
+		return list;
 	}
 
 	public boolean setTransaction(Transactions transaction) {
