@@ -55,3 +55,22 @@ CREATE TABLE `transactions` (
   CONSTRAINT `transactions_ibfk_2` FOREIGN KEY (`accountId`) REFERENCES `accounts` (`accountId`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `transactions_ibfk_3` FOREIGN KEY (`toAccountId`) REFERENCES `accounts` (`accountId`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE VIEW transaction_history AS
+SELECT 
+    t.transactionId,
+    t.userId,
+    t.accountId,
+    t.toAccountId,
+    t.amount,
+    t.transactionTime,
+
+    -- Determine direction dynamically
+    CASE 
+        WHEN t.transactionType = 'transfer_out' THEN 'transfer_out'
+        WHEN t.transactionType = 'withdraw' THEN 'withdraw'
+        WHEN t.transactionType = 'deposit' THEN 'deposit'
+        WHEN t.transactionType = 'initial_deposit' THEN 'initial_deposit'
+        ELSE t.transactionType
+    END AS transactionType
+FROM transactions t;
